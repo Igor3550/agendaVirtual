@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Service {
+  id        Int         @id   @default(autoincrement())
+  name      String
+  price     Int 
+  duration  String
+  createdAt DateTime   @default(now())
+  Schedule  Schedule[]
+
+  @@map("services")
+
+}
+
+model Schedule {
+  id          Int       @id   @default(autoincrement())
+  clientName  String 
+  date        String
+  hour        String
+  service_id  Int
+  createdAt   DateTime   @default(now())
+  Service     Service   @relation(fields: [service_id], references: [id])
+  History     History[]
+
+  @@map("schedules")
+}
+
+model History {
+  id          Int       @id   @default(autoincrement())
+  schedule_id Int
+  createdAt   DateTime   @default(now())
+  Schedule    Schedule  @relation(fields: [schedule_id], references: [id])
+
+  @@map("histories")
+}
