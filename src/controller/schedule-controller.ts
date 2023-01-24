@@ -25,9 +25,24 @@ async function createSchedule(req: Request, res: Response) {
   }
 }
 
+async function updateSchedule(req: Request, res: Response) {
+  const schedule_id = req.params.id;
+  const { name, service_id, date, hour } = req.body;
+
+  try {
+    const updatedSchedule = await scheduleService.updateSchedule(Number(schedule_id), name, service_id, date, hour);
+    return res.send(updatedSchedule);
+  } catch (error) {
+    if(error.name === 'BadRequest') return res.sendStatus(httpStatus.BAD_REQUEST);
+    if(error.name === 'NotFound') return res.sendStatus(httpStatus.NOT_FOUND);
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
 const scheduleController = {
   sendScheduleList,
-  createSchedule
+  createSchedule,
+  updateSchedule
 }
 
 export default scheduleController;

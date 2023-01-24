@@ -15,6 +15,14 @@ async function listScheduleByDate(date: string) {
   });
 }
 
+async function getScheduleById(id: number) {
+  return prisma.schedule.findFirst({
+    where: {
+      id
+    }
+  });
+}
+
 async function insertSchedule(name: string, service_id: number, date: string, hour: number) {
   return prisma.schedule.create({
     data: {
@@ -26,10 +34,26 @@ async function insertSchedule(name: string, service_id: number, date: string, ho
   });
 }
 
+async function updateSchedule(id:number, name: string, service_id: number, date: string, hour: number) {
+  return prisma.schedule.update({
+    where: {
+      id
+    },
+    data: {
+      clientName: name,
+      date,
+      hour,
+      service_id
+    }
+  });
+}
+
 const scheduleRepository = {
+  getScheduleById,
   listSchedule,
   listScheduleByDate,
-  insertSchedule
+  insertSchedule,
+  updateSchedule
 }
 
 export default scheduleRepository;

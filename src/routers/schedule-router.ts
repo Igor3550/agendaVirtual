@@ -7,6 +7,7 @@ const scheduleRouter = Router();
 
 scheduleRouter
   .get('/', scheduleController.sendScheduleList)
-  .post('/', verifyScheduleInput, scheduleController.createSchedule);
+  .post('/', verifyScheduleInput, scheduleController.createSchedule)
+  .put('/:id', verifyScheduleInput, scheduleController.updateSchedule);
 
 export { scheduleRouter }
