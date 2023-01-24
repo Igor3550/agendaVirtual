@@ -11,8 +11,8 @@ model Service {
   id        Int         @id   @default(autoincrement())
   name      String
   price     Int 
-  duration  String
-  createdAt DateTime   @default(now())
+  duration  Int
+  createdAt DateTime    @default(now())
   Schedule  Schedule[]
 
   @@map("services")
@@ -23,7 +23,7 @@ model Schedule {
   id          Int       @id   @default(autoincrement())
   clientName  String 
   date        String
-  hour        String
+  hour        Int
   service_id  Int
   createdAt   DateTime   @default(now())
   Service     Service   @relation(fields: [service_id], references: [id])
