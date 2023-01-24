@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import scheduleRepository from "../repositories/schedule-repository";
 import { Service } from "@prisma/client";
 import { dayHoursHash } from "./hashtable-days-hour";
@@ -5,6 +6,9 @@ import { dayHoursHash } from "./hashtable-days-hour";
 async function verifyDate(date: string, hour: number, service: Service) {
   const scheduleDayList = await scheduleRepository.listScheduleByDate(date);
   const durationHourList = [];
+  const isAfterTodayVerify = dayjs(date).isBefore(dayjs());
+  
+  if(isAfterTodayVerify) return false;
 
   for(let i = 0; i<(service.duration); i++){
     durationHourList.push(hour+i);

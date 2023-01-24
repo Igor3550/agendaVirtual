@@ -4,8 +4,8 @@ import {faker} from "@faker-js/faker";
 async function createService() {
   const service = await prisma.service.create({
     data: {
-      name: faker.name.firstName(),
-      duration: '3h',
+      name: 'Fibra',
+      duration: 3,
       price: 130
     }
   })
@@ -19,7 +19,7 @@ async function createSchedule() {
       clientName: faker.name.firstName(),
       service_id: (await createService()).id,
       date: faker.date.future().toISOString(),
-      hour: '7h'
+      hour: 7
     }
   })
 
@@ -27,5 +27,6 @@ async function createSchedule() {
 };
 
 export {
-  createSchedule
+  createSchedule,
+  createService
 };
