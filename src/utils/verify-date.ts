@@ -8,12 +8,12 @@ async function verifyDate(schedule_id: number, date: string, hour: number, servi
   const scheduleDayList = await scheduleRepository.listScheduleByDate(date);
   const durationHourList = [];
   const isAfterTodayVerify = dayjs(date).isBefore(dayjs());
-
-  if(isAfterTodayVerify) return false;
-
-  for(let i = 0; i<(service.duration); i++){
-    durationHourList.push(hour+i);
+  const availableHours = {
+    dayHoursHash,
+    hourIsAvailable: false
   }
+
+  if(isAfterTodayVerify) return availableHours;
 
   scheduleDayList.map((schedule) => {
     const start = schedule.hour;
@@ -26,15 +26,25 @@ async function verifyDate(schedule_id: number, date: string, hour: number, servi
 
   });
 
+  if(!schedule_id && !hour && !service) {
+    availableHours.hourIsAvailable = true
+    return availableHours;
+  }
+
+  for(let i = 0; i<(service.duration); i++){
+    durationHourList.push(hour+i);
+  }
+
   for(let i = 0; i<(durationHourList.length); i++){
     let hour = durationHourList[i];
 
     if(!dayHoursHash[hour]) {
-      return false;
+      return availableHours;
     };
   };
 
-  return true;
+  availableHours.hourIsAvailable = true
+  return availableHours;
 }
 
 export {

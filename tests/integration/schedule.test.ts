@@ -8,10 +8,6 @@ import { cleanDb } from "../helpers";
 
 const api = supertest(app);
 
-beforeAll(async () => {
-  await cleanDb();
-});
-
 beforeEach(async () => {
   await cleanDb();
 });
@@ -20,17 +16,14 @@ describe("GET /schedule", () => {
   it('Should respond with status code 200 and the schedule list', async () => {
     const response = await api.get('/schedule');
 
-    expect(response.status).toBe(httpStatus.OK);
+    return expect(response.status).toBe(httpStatus.OK);
   });
 
   it('Should respond with the correct schedule body list!', async () => {
     const createdSchedule = await createSchedule();
     const response = await api.get('/schedule');
 
-    console.log(response.body);
-    console.log(createdSchedule);
-
-    expect(response.body).toEqual([{
+    return expect(response.body).toEqual([{
       "id": createdSchedule.id,
       "clientName": createdSchedule.clientName,
       "service_id": createdSchedule.service_id,

@@ -12,7 +12,7 @@ async function verifyServiceAndDate(schedule_id: number, service_id: number, dat
 
   const dateVerify = await verifyDate(schedule_id, date, hour, service);
 
-  if(!dateVerify) {
+  if(!dateVerify.hourIsAvailable) {
     throw badRequest();
   };
 }

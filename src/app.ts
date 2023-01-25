@@ -1,22 +1,30 @@
-import express from 'express';
-import { loadEnv } from './config';
+import express, { Express } from 'express';
+import cors from 'cors';
+
+import { connectDb, disconnectDB, loadEnv } from './config';
 
 import {
+  dateRouter,
   scheduleRouter
 } from './routers'
 
 loadEnv();
 
-const PORT = process.env.PORT || 4000;
 const app = express();
 
 app
+  .use(cors())
   .use(express.json())
-  .get('/health', (req, res) => { res.send('OK') })
-  .use('/schedule', scheduleRouter);
+  .use('/schedule', scheduleRouter)
+  .use('/date', dateRouter);
 
-app.listen(PORT, () => {
-  console.log(`Listening on port: ${PORT}`);
-} )
+export function init(): Promise<Express> {
+  connectDb();
+  return Promise.resolve(app);
+}
+
+export async function close(): Promise<void>{
+  await disconnectDB();
+}
 
 export default app;

@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development npx nodemon src/app.ts",
+    "dev": "NODE_ENV=development npx nodemon src/server.ts",
     "dev:migration": "npm run dev:load-envs prisma migrate dev",
     "dev:load-envs": "dotenv -e .env.development",
     "test": "NODE_ENV=test jest --passWithNoTests --runInBand",
-    "test:watch": "jest --watch --passWithNoTests --runInBand",
+    "test:watch": "npx jest --watch --passWithNoTests --runInBand",
     "test:migration:run": "npm run test:load-envs prisma migrate deploy",
     "test:load-envs": "dotenv -e .env.test"
   },
@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^4.9.0",
+    "cors": "^2.8.5",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
