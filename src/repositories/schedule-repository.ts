@@ -48,12 +48,21 @@ async function updateSchedule(id:number, name: string, service_id: number, date:
   });
 }
 
+async function deleteScheduleById(id: number) {
+  return prisma.schedule.delete({
+    where: {
+      id
+    }
+  });
+}
+
 const scheduleRepository = {
   getScheduleById,
   listSchedule,
   listScheduleByDate,
   insertSchedule,
-  updateSchedule
+  updateSchedule,
+  deleteScheduleById
 }
 
 export default scheduleRepository;

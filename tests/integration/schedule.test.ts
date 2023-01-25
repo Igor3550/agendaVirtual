@@ -174,3 +174,40 @@ describe("PUT /schedule/:id", () => {
   });
 
 });
+
+describe("DELETE /schedule/:id", () => {
+
+  it("Should respond status code 400 is invalid!", async () => {
+    const response = await api.delete(`/schedule/test`);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+
+  });
+
+  it("Should respond status code 404 if schedule doesnt exists!", async () => {
+
+    const response = await api.delete(`/schedule/0`);
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+
+  });
+
+  it("Should respond status code 200 and the correct body deleted!", async () => {
+    const createdSchedule = await createSchedule();
+
+    const response = await api.delete(`/schedule/${createdSchedule.id}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+
+    expect(response.body).toEqual({
+      id: createdSchedule.id,
+      clientName: createdSchedule.clientName,
+      date: createdSchedule.date,
+      service_id: createdSchedule.service_id,
+      hour: createdSchedule.hour,
+      createdAt: createdSchedule.createdAt.toISOString()
+    });
+
+  });
+
+});

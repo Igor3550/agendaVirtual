@@ -43,10 +43,19 @@ async function updateSchedule(id: number, name: string, service_id: number, date
   return updatedSchedule;
 }
 
+async function deleteScheduleById(id: number) {
+  const schedule = await scheduleRepository.getScheduleById(id);
+  if(!schedule) throw notFound();
+
+  const deletedSchedule = await scheduleRepository.deleteScheduleById(id);
+  return deletedSchedule;
+}
+
 const scheduleService = {
   getScheduleList,
   insertSchedule,
-  updateSchedule
+  updateSchedule,
+  deleteScheduleById
 }
 
 export default scheduleService;
