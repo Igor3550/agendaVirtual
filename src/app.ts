@@ -5,8 +5,9 @@ import { connectDb, disconnectDB, loadEnv } from './config';
 
 import {
   dateRouter,
-  scheduleRouter
-} from './routers'
+  scheduleRouter,
+  serviceRouter
+} from './routers';
 
 loadEnv();
 
@@ -16,7 +17,8 @@ app
   .use(cors())
   .use(express.json())
   .use('/schedule', scheduleRouter)
-  .use('/date', dateRouter);
+  .use('/date', dateRouter)
+  .use('/services', serviceRouter);
 
 export function init(): Promise<Express> {
   connectDb();
