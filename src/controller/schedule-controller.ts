@@ -53,11 +53,26 @@ async function deleteSchedule(req: Request, res: Response) {
   }
 }
 
+async function finishSchedule(req: Request, res: Response) {
+  const schedule_id = req.params.id;
+  if(!schedule_id || isNaN(Number(schedule_id))) return res.sendStatus(httpStatus.BAD_REQUEST);
+
+  try {
+    const finishedSchedule = await scheduleService.finishScheduleById(Number(schedule_id));
+    return res.send(finishedSchedule);
+  } catch (error) {
+    if(error.name === 'BadRequest') return res.sendStatus(httpStatus.BAD_REQUEST);
+    if(error.name === 'NotFound') return res.sendStatus(httpStatus.NOT_FOUND);
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
 const scheduleController = {
   sendScheduleList,
   createSchedule,
   updateSchedule,
-  deleteSchedule
+  deleteSchedule,
+  finishSchedule
 }
 
 export default scheduleController;

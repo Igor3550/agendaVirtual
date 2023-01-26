@@ -9,6 +9,7 @@ scheduleRouter
   .get('/', scheduleController.sendScheduleList)
   .post('/', verifyScheduleInput, scheduleController.createSchedule)
   .put('/:id', verifyScheduleInput, scheduleController.updateSchedule)
-  .delete('/:id', scheduleController.deleteSchedule);
+  .delete('/:id', scheduleController.deleteSchedule)
+  .put('/finish/:id', scheduleController.finishSchedule);
 
 export { scheduleRouter }

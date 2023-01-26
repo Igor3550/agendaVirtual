@@ -26,7 +26,22 @@ async function createSchedule() {
   return schedule;
 };
 
+async function createScheduleFinished() {
+  const schedule = await prisma.schedule.create({
+    data: {
+      clientName: faker.name.firstName(),
+      service_id: (await createService()).id,
+      date: faker.date.future().toISOString(),
+      hour: 7,
+      finished: true
+    }
+  })
+
+  return schedule;
+};
+
 export {
   createSchedule,
-  createService
+  createService,
+  createScheduleFinished
 };

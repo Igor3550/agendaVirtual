@@ -5,6 +5,7 @@ import { connectDb, disconnectDB, loadEnv } from './config';
 
 import {
   dateRouter,
+  historyRouter,
   scheduleRouter,
   serviceRouter
 } from './routers';
@@ -18,7 +19,8 @@ app
   .use(express.json())
   .use('/schedule', scheduleRouter)
   .use('/date', dateRouter)
-  .use('/services', serviceRouter);
+  .use('/services', serviceRouter)
+  .use('/history', historyRouter);
 
 export function init(): Promise<Express> {
   connectDb();

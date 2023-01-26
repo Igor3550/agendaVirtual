@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=development npx nodemon src/server.ts",
     "dev:migration": "npm run dev:load-envs prisma migrate dev",
+    "dev:prisma:generate": "npm run dev:load-envs prisma generate",
     "dev:load-envs": "dotenv -e .env.development",
     "test": "NODE_ENV=test jest --passWithNoTests --runInBand",
     "test:watch": "npx jest --watch --passWithNoTests --runInBand",

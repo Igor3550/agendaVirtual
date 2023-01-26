@@ -1,13 +1,18 @@
 import prisma from "../database/prisma-connection";
 
 async function listSchedule() {
-  return prisma.schedule.findMany({});
+  return prisma.schedule.findMany({
+    where: {
+      finished: false
+    }
+  });
 }
 
 async function listScheduleByDate(date: string) {
   return prisma.schedule.findMany({
     where: {
-      date: date
+      date: date,
+      finished: false
     },
     include: {
       Service: true
@@ -48,6 +53,17 @@ async function updateSchedule(id:number, name: string, service_id: number, date:
   });
 }
 
+async function finishSchedule(id:number) {
+  return prisma.schedule.update({
+    where: {
+      id
+    },
+    data: {
+      finished: true
+    }
+  });
+}
+
 async function deleteScheduleById(id: number) {
   return prisma.schedule.delete({
     where: {
@@ -62,7 +78,8 @@ const scheduleRepository = {
   listScheduleByDate,
   insertSchedule,
   updateSchedule,
-  deleteScheduleById
+  deleteScheduleById,
+  finishSchedule
 }
 
 export default scheduleRepository;

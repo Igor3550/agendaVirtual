@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import supertest from "supertest";
 
 import app from "../../src/app";
-import { createSchedule, createService } from '../factories';
+import { createSchedule, createScheduleFinished, createService } from '../factories';
 import { cleanDb } from "../helpers";
 
 const api = supertest(app);
@@ -29,6 +29,7 @@ describe("GET /schedule", () => {
       "service_id": createdSchedule.service_id,
       "date": createdSchedule.date,
       "hour": createdSchedule.hour,
+      "finished": createdSchedule.finished,
       "createdAt": createdSchedule.createdAt.toISOString()
     }]);
 
@@ -101,6 +102,7 @@ describe("POST /schedule", () => {
       date: fakeScheduleBody.date.toISOString(),
       service_id: fakeScheduleBody.service_id,
       hour: fakeScheduleBody.hour,
+      finished: false,
       createdAt: expect.any(String)
     });
 
@@ -161,6 +163,46 @@ describe("PUT /schedule/:id", () => {
       date: fakeScheduleBody.date.toISOString(),
       service_id: createdSchedule.service_id,
       hour: createdSchedule.hour,
+      finished: false,
+      createdAt: createdSchedule.createdAt.toISOString()
+    });
+
+  });
+
+});
+
+describe("PUT /schedule/finish/:id", () => {
+
+  it("Should respond status code 400 if schedule already finishid!", async () => {
+    const createdSchedule = await createScheduleFinished();
+
+    const response = await api.put(`/schedule/finish/${createdSchedule.id}`);
+
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+
+  });
+
+  it("Should respond status code 404 when id not exists!", async () => {
+    const response = await api.put(`/schedule/finish/0`);
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+
+  });
+
+  it("Should respond status code 200 and the correct body!", async () => {
+    const createdSchedule = await createSchedule();
+
+    const response = await api.put(`/schedule/finish/${createdSchedule.id}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+
+    expect(response.body).toEqual({
+      id: createdSchedule.id,
+      clientName: createdSchedule.clientName,
+      date: createdSchedule.date,
+      service_id: createdSchedule.service_id,
+      hour: createdSchedule.hour,
+      finished: true,
       createdAt: createdSchedule.createdAt.toISOString()
     });
 
@@ -198,6 +240,7 @@ describe("DELETE /schedule/:id", () => {
       date: createdSchedule.date,
       service_id: createdSchedule.service_id,
       hour: createdSchedule.hour,
+      finished: false,
       createdAt: createdSchedule.createdAt.toISOString()
     });
 

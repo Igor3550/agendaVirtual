@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -20,23 +21,14 @@ model Service {
 }
 
 model Schedule {
-  id          Int       @id   @default(autoincrement())
+  id          Int        @id   @default(autoincrement())
   clientName  String 
   date        String
   hour        Int
   service_id  Int
+  finished    Boolean    @default(false)
   createdAt   DateTime   @default(now())
-  Service     Service   @relation(fields: [service_id], references: [id])
-  History     History[]
+  Service     Service    @relation(fields: [service_id], references: [id])
 
   @@map("schedules")
-}
-
-model History {
-  id          Int       @id   @default(autoincrement())
-  schedule_id Int
-  createdAt   DateTime   @default(now())
-  Schedule    Schedule  @relation(fields: [schedule_id], references: [id])
-
-  @@map("histories")
 }

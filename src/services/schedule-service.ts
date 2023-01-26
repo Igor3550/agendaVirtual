@@ -51,11 +51,21 @@ async function deleteScheduleById(id: number) {
   return deletedSchedule;
 }
 
+async function finishScheduleById(id: number) {
+  const schedule = await scheduleRepository.getScheduleById(id);
+  if(!schedule) throw notFound();
+  if(schedule.finished) throw badRequest();
+
+  const finishedSchedule = await scheduleRepository.finishSchedule(id);
+  return finishedSchedule;
+}
+
 const scheduleService = {
   getScheduleList,
   insertSchedule,
   updateSchedule,
-  deleteScheduleById
+  deleteScheduleById,
+  finishScheduleById
 }
 
 export default scheduleService;
