@@ -4,8 +4,14 @@ import httpStatus from "http-status";
 import waitingService from "../services/waiting-service";
 
 async function getWaitingList(req: Request, res: Response) {
+  const name = String(req.query.name);
+
   try {
-    const waitingList = await waitingService.getWaitingList();
+    if(!name) {
+      const waitingList = await waitingService.getWaitingList();
+      return res.send(waitingList);
+    }
+    const waitingList = await waitingService.getWaitingsByName(name);
     return res.send(waitingList);
   } catch (error) {
     if(error.name === 'BadRequest') return res.sendStatus(httpStatus.BAD_REQUEST);

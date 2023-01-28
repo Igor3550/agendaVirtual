@@ -14,6 +14,17 @@ async function getWaitingById(id: number) {
   return waiting;
 }
 
+async function getWaitingByName(name: string) {
+  const waiting = await prisma.waiting.findMany({
+    where:{
+      clientName:{
+        contains: name
+      }
+    }
+  });
+  return waiting;
+}
+
 async function insertWaiting(name: string) {
   const waiting = await prisma.waiting.create({
     data:{
@@ -49,7 +60,8 @@ const waitingRepository = {
   insertWaiting,
   updateWaiting,
   deleteWaiting,
-  getWaitingById
+  getWaitingById,
+  getWaitingByName
 }
 
 export default waitingRepository;

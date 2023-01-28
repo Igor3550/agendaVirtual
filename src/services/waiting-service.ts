@@ -6,6 +6,11 @@ async function getWaitingList() {
   return waitingList;
 }
 
+async function getWaitingsByName(name: string) {
+  const waitings = await waitingRepository.getWaitingByName(name);
+  return waitings;
+}
+
 async function createWaiting(name: string) {
   const waiting = await waitingRepository.insertWaiting(name);
   return waiting;
@@ -31,7 +36,8 @@ const waitingService = {
   getWaitingList,
   createWaiting,
   updateWaiting,
-  deleteWaiting
+  deleteWaiting,
+  getWaitingsByName
 }
 
 export default waitingService;

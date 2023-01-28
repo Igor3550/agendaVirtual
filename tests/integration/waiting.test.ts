@@ -24,6 +24,24 @@ describe('GET /waiting', () => {
 
 });
 
+describe('GET /waiting?name=client', () => {
+
+  it('Should respond with 200 and list of waitings that contains the name!', async () => {
+    const createdWaiting = await createWaiting();
+    const createdWaiting2 = await createWaiting();
+    const response = await api.get(`/waiting?name=${createdWaiting.clientName}`);
+
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.body).toEqual([{
+      id: createdWaiting.id,
+      clientName: createdWaiting.clientName,
+      createdAt: createdWaiting.createdAt.toISOString()
+    }]);
+    
+  });
+
+});
+
 describe('POST /waiting', () => {
 
   it('Should respond with 400 when name not passed!', async () => {
