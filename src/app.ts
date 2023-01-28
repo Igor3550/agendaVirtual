@@ -7,7 +7,8 @@ import {
   dateRouter,
   historyRouter,
   scheduleRouter,
-  serviceRouter
+  serviceRouter,
+  waitingRouter
 } from './routers';
 
 loadEnv();
@@ -20,7 +21,8 @@ app
   .use('/schedule', scheduleRouter)
   .use('/date', dateRouter)
   .use('/services', serviceRouter)
-  .use('/history', historyRouter);
+  .use('/history', historyRouter)
+  .use('/waiting', waitingRouter);
 
 export function init(): Promise<Express> {
   connectDb();
