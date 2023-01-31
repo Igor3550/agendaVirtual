@@ -11,11 +11,11 @@ beforeEach(async () => {
 
 const api = supertest(app);
 
-describe('GET /date/hours', () => {
+describe('GET /date/hours/:date', () => {
 
   it('Should respond with status code 400 when date is invalid!', async () => {
     const fakeDate = faker.date.past();
-    const response = await api.get('/date/hours').send({date:fakeDate});
+    const response = await api.get(`/date/hours/${fakeDate}`);
 
     expect(response.status).toBe(400);
   });
@@ -39,7 +39,7 @@ describe('GET /date/hours', () => {
       "20": true
     };
 
-    const response = await api.get('/date/hours').send({date:createdSchedule.date});
+    const response = await api.get(`/date/hours/${createdSchedule.date}`);
 
     expect(response.status).toBe(200);
     return expect(response.body).toEqual(shouldRespond);

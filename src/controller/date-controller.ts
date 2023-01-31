@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import dateService from "../services/date-service";
 
 async function getDateHours(req: Request, res: Response) {
-  const { date } = req.body;
+  const { date } = req.params;
   if(!date) return res.sendStatus(httpStatus.BAD_REQUEST);
 
   try {
