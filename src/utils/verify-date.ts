@@ -4,16 +4,18 @@ import { Service } from "@prisma/client";
 import { getDaysHoursHash } from "./hashtable-days-hour";
 
 async function verifyDate(schedule_id: number, date: string, hour: number, service: Service) {
+  const today = dayjs().format('YYYY-MM-DD')
   const dayHoursHash = getDaysHoursHash();
   const scheduleDayList = await scheduleRepository.listScheduleByDate(date);
   const durationHourList = [];
   const isAfterTodayVerify = dayjs(date).isBefore(dayjs());
+  const isSameTodayVerify = dayjs(date).isSame(dayjs(today));
   const availableHours = {
     dayHoursHash,
     hourIsAvailable: false
   }
 
-  if(isAfterTodayVerify) return availableHours;
+  if(isAfterTodayVerify && !isSameTodayVerify) return availableHours;
 
   scheduleDayList.map((schedule) => {
     const start = schedule.hour;

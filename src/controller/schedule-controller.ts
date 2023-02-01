@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
@@ -15,8 +16,10 @@ async function sendScheduleList(req: Request, res: Response) {
 async function createSchedule(req: Request, res: Response) {
   const { name, date, hour, service_id } = req.body;
 
+  const tratedDate = dayjs(date).toISOString();
+
   try {
-    const schedule = await scheduleService.insertSchedule(name, service_id, date, hour);
+    const schedule = await scheduleService.insertSchedule(name, service_id, tratedDate, hour);
     return res.send(schedule);
   } catch (error) {
     if(error.name === 'BadRequest') return res.sendStatus(httpStatus.BAD_REQUEST);
