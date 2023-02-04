@@ -1,8 +1,11 @@
 import prisma from "../database/prisma-connection";
 
 async function getWaitingList() {
-  const waitingList = await prisma.waiting.findMany({});
-  return waitingList;
+  return await prisma.waiting.findMany({
+    orderBy:{
+      id:'asc'
+    }
+  });
 }
 
 async function getWaitingById(id: number) {
@@ -18,17 +21,20 @@ async function getWaitingByName(name: string) {
   const waiting = await prisma.waiting.findMany({
     where:{
       clientName:{
-        contains: name
+        contains: name,
+        mode: 'insensitive'
       }
     }
   });
   return waiting;
 }
 
-async function insertWaiting(name: string) {
+async function insertWaiting(name: string, date: string, service_id: number) {
   const waiting = await prisma.waiting.create({
     data:{
-      clientName: name
+      clientName: name,
+      date,
+      service_id
     }
   });
   return waiting;

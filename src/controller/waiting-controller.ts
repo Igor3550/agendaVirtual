@@ -1,17 +1,18 @@
+import dayjs from "dayjs";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
 import waitingService from "../services/waiting-service";
 
 async function getWaitingList(req: Request, res: Response) {
-  const name = String(req.query.name);
+  const name = req.query.name;
 
   try {
     if(!name) {
       const waitingList = await waitingService.getWaitingList();
       return res.send(waitingList);
     }
-    const waitingList = await waitingService.getWaitingsByName(name);
+    const waitingList = await waitingService.getWaitingsByName(String(name));
     return res.send(waitingList);
   } catch (error) {
     if(error.name === 'BadRequest') return res.sendStatus(httpStatus.BAD_REQUEST);
@@ -21,11 +22,14 @@ async function getWaitingList(req: Request, res: Response) {
 }
 
 async function createWaiting(req: Request, res: Response) {
-  const { name } = req.body;
-  if(!name) return res.sendStatus(httpStatus.BAD_REQUEST);
+  const { name, date, service_id } = req.body;
+  if(!name || !date || !service_id) return res.sendStatus(httpStatus.BAD_REQUEST);
 
   try {
-    const waiting = await waitingService.createWaiting(name);
+
+    const tratedDate = dayjs(date).toISOString();
+
+    const waiting = await waitingService.createWaiting(name, tratedDate, Number(service_id));
     return res.send(waiting);
   } catch (error) {
     if(error.name === 'BadRequest') return res.sendStatus(httpStatus.BAD_REQUEST);

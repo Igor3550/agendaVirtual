@@ -15,6 +15,7 @@ model Service {
   duration  Int
   createdAt DateTime    @default(now())
   Schedule  Schedule[]
+  Waiting   Waiting[]
 
   @@map("services")
 
@@ -36,7 +37,10 @@ model Schedule {
 model Waiting {
   id          Int        @id   @default(autoincrement())
   clientName  String 
+  date        DateTime 
+  service_id  Int
   createdAt   DateTime   @default(now())
+  Service     Service    @relation(fields: [service_id], references: [id])
 
   @@map("waitings")
 }

@@ -15,7 +15,8 @@ async function getHistoryByName(name: string) {
     where:{
       finished: true,
       clientName:{
-        contains: name
+        contains: name,
+        mode: 'insensitive'
       }
     }
   });

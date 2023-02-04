@@ -32,8 +32,10 @@ async function updateSchedule(req: Request, res: Response) {
   const schedule_id = req.params.id;
   const { name, service_id, date, hour } = req.body;
 
+  const tratedDate = dayjs(date).toISOString();
+
   try {
-    const updatedSchedule = await scheduleService.updateSchedule(Number(schedule_id), name, service_id, date, hour);
+    const updatedSchedule = await scheduleService.updateSchedule(Number(schedule_id), name, service_id, tratedDate, hour);
     return res.send(updatedSchedule);
   } catch (error) {
     if(error.name === 'BadRequest') return res.sendStatus(httpStatus.BAD_REQUEST);

@@ -1,4 +1,5 @@
 import waitingRepository from "../repositories/waiting-repository";
+import serviceService from "../services/services-service";
 import { notFound } from "../errors/errors";
 
 async function getWaitingList() {
@@ -11,8 +12,11 @@ async function getWaitingsByName(name: string) {
   return waitings;
 }
 
-async function createWaiting(name: string) {
-  const waiting = await waitingRepository.insertWaiting(name);
+async function createWaiting(name: string, date: string, service_id: number) {
+  const service = await serviceService.findServiceById(service_id);
+  if(!service) throw notFound();
+  
+  const waiting = await waitingRepository.insertWaiting(name, date, service_id);
   return waiting;
 }
 
