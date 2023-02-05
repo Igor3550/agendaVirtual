@@ -5,6 +5,7 @@ import supertest from "supertest";
 import app from "../../src/app";
 import { cleanDb } from "../helpers";
 import { createWaiting } from "../factories/waitng-factory";
+import { createService } from "../factories";
 
 beforeEach(async () => {
   await cleanDb();
@@ -35,6 +36,8 @@ describe('GET /waiting?name=client', () => {
     expect(response.body).toEqual([{
       id: createdWaiting.id,
       clientName: createdWaiting.clientName,
+      date: createdWaiting.date.toISOString(),
+      service_id: createdWaiting.service_id,
       createdAt: createdWaiting.createdAt.toISOString()
     }]);
     
@@ -52,13 +55,20 @@ describe('POST /waiting', () => {
   });
 
   it('Should respond with 200 and the waiting body!', async () => {
-    const name = faker.name.firstName();
-    const response = await api.post('/waiting').send({name: name});
+    const service = await createService();
+    const body = {
+      name: faker.name.firstName(),
+      date: faker.date.future(),
+      service_id: service.id
+    }
+    const response = await api.post('/waiting').send(body);
 
     expect(response.status).toBe(httpStatus.OK);
     expect(response.body).toEqual({
       id: expect.any(Number),
-      clientName: name,
+      clientName: body.name,
+      date: body.date.toISOString(),
+      service_id: body.service_id,
       createdAt: expect.any(String)
     });
     
@@ -101,6 +111,8 @@ describe('PUT /waiting/:id', () => {
     expect(response.body).toEqual({
       id: createdWaiting.id,
       clientName: name,
+      date: createdWaiting.date.toISOString(),
+      service_id: createdWaiting.service_id,
       createdAt: createdWaiting.createdAt.toISOString()
     });
     
@@ -132,6 +144,8 @@ describe('DELETE /waiting/:id', () => {
     expect(response.body).toEqual({
       id: createdWaiting.id,
       clientName: createdWaiting.clientName,
+      date: createdWaiting.date.toISOString(),
+      service_id: createdWaiting.service_id,
       createdAt: createdWaiting.createdAt.toISOString()
     });
     
