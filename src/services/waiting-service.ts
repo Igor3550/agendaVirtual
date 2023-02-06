@@ -1,5 +1,5 @@
 import waitingRepository from "../repositories/waiting-repository";
-import serviceService from "../services/services-service";
+import serviceService from "./services-service";
 import { notFound } from "../errors/errors";
 
 async function getWaitingList() {
